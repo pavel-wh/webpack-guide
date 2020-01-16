@@ -1,8 +1,8 @@
 {
   "name": "webpack-guide",
   "version": "1.0.0",
-  "description": "webpack, JS",
-  "main": "app.js",
+  "description": "webpack course 2020",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +10,10 @@
     "JS",
     "webpack"
   ],
-  "author": "pB",
-  "license": "ISC"
+  "author": "pavel-wh <pavel.wh@yandex.ru>",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
 }
