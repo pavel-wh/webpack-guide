@@ -1,6 +1,11 @@
 import './styles/styles.css'
+
 import Post from './Post'
 
-const post = new Post('Webpack Post Title')
+import json from './assets/data/example.json'
 
-console.log('Post to Stirng: ', post.toString())
+import WebpackLogo from './assets/images/webpack-logo.png'
+
+const post = new Post('Webpack Post Title', WebpackLogo)
+
+console.log('Post to Stirng: ', post.toString(), json)
