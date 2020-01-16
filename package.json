@@ -1,0 +1,15 @@
+{
+  "name": "webpack-guide",
+  "version": "1.0.0",
+  "description": "webpack, JS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "JS",
+    "webpack"
+  ],
+  "author": "pB",
+  "license": "ISC"
+}
