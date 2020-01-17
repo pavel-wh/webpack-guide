@@ -26,6 +26,25 @@ const optimization = () => {
 const isDev = process.env.NODE_ENV === 'development'
 console.log('IS DEV:', isDev)
 
+const filename = ext => !isDev ? `[name].[contenthash].${ ext }` : `[name].${ ext }`
+const cssLoaders = extra => {
+    const loaders = [
+        {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+                hmr: isDev,
+                reloadAll: true
+            }
+        },
+        'css-loader'
+    ]
+    if (extra) {
+        loaders.push(extra)
+    }
+    return loaders
+}
+
+
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
@@ -34,7 +53,7 @@ module.exports = {
         analytics: './analytics.js'
     },
     output: {
-        filename: !isDev ? '[name].[contenthash].js' : '[name].[hash].js',
+        filename: filename('js'),
         path: path.resolve(__dirname, 'dist')
     },
     resolve: {
@@ -64,23 +83,22 @@ module.exports = {
             }
         ]),
         new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css',
+            filename: filename('css'),
         })
     ],
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: isDev,
-                            reloadAll: true
-                        }
-                    },
-                    'css-loader'
-                ]
+                use: cssLoaders(),
+            },
+            {
+              test: /\.s[ac]ss$/i,
+              use: cssLoaders('sass-loader'),
+            },
+            {
+              test: /\.less$/i,
+              use: cssLoaders('less-loader'),
             },
             {
                 test: /\.(png|jpg|svg|gif)$/,

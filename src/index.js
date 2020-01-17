@@ -1,9 +1,12 @@
 import * as $ from 'jquery'
-import '@/styles/styles'
+
+import '@/styles/css/styles.css'
+import '@/styles/sass/main.sass'
+import '@/styles/less/main.less'
 
 import Post from '@models/Post'
 
-import json from '@/assets/data/example'
+import json from '@/assets/data/example.json'
 import xml from '@/assets/data/example.xml'
 import csv from '@/assets/data/example.csv'
 
