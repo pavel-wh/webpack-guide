@@ -11,6 +11,6 @@ import WebpackLogo from '@/assets/images/webpack-logo'
 
 const post = new Post('Webpack Post Title', WebpackLogo)
 
-$('pre').html(post.toString())
+$('pre').addClass('code').html(post.toString())
 
 console.log('Post to Stirng: ', post.toString(), json, xml, csv)
