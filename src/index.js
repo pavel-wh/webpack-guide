@@ -6,6 +6,8 @@ import '@/styles/less/main.less'
 
 import Post from '@models/Post'
 
+import './babel'
+
 import json from '@/assets/data/example.json'
 import xml from '@/assets/data/example.xml'
 import csv from '@/assets/data/example.csv'
