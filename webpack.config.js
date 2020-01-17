@@ -12,6 +12,18 @@ module.exports = {
         filename: '[name].[contenthash].bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
+    resolve: {
+        extensions: ['.js', '.json', '.png', '.css'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+            '@models': path.resolve(__dirname, 'src/modals'),
+        }
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
+    },
     plugins: [
         new HTMLwebpackPlugin({
             template: './index.html'
