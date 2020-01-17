@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const HTMLwebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -6,6 +7,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = !isDev
+console.log('IS DEV:', isDev)
+
+const filename = extra => isProd ? `[name].[contenthash].${ extra }` : `[name].${ extra }`
 const optimization = () => {
     const config = {
         splitChunks: {
@@ -13,7 +19,7 @@ const optimization = () => {
         }
     }
 
-    if (!isDev) {
+    if (isProd) {
         config.minimizer = [
             new OptimizeCSSAssetsPlugin(),
             new TerserPlugin()
@@ -22,11 +28,6 @@ const optimization = () => {
 
     return config
 }
-
-const isDev = process.env.NODE_ENV === 'development'
-console.log('IS DEV:', isDev)
-
-const filename = ext => !isDev ? `[name].[contenthash].${ ext }` : `[name].${ ext }`
 const cssLoaders = extra => {
     const loaders = [
         {
@@ -65,15 +66,19 @@ module.exports = {
     },
     optimization: optimization(),
     devServer: {
+        contentBase: path.resolve(__dirname, 'src'),
+        watchContentBase: true,
         port: 4200,
-        hot: isDev
+        compress: true,
+        hot: isDev,
     },
     plugins: [
         new HTMLwebpackPlugin({
             template: './index.html',
             minify: {
-                collapseWhitespace: !isDev
-            }
+                collapseWhitespace: isProd
+            },
+            cache: isProd
         }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin([
@@ -84,7 +89,8 @@ module.exports = {
         ]),
         new MiniCssExtractPlugin({
             filename: filename('css'),
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin(),
     ],
     module: {
         rules: [

@@ -4,7 +4,7 @@ import '@/styles/css/styles.css'
 import '@/styles/sass/main.sass'
 import '@/styles/less/main.less'
 
-import Post from '@models/Post'
+import Post from '@models/Post' 
 
 import './babel'
 
