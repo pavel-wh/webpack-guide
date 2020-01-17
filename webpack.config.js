@@ -3,6 +3,29 @@ const HTMLwebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+
+const optimization = () => {
+    const config = {
+        splitChunks: {
+            chunks: 'all'
+        }
+    }
+
+    if (!isDev) {
+        config.minimizer = [
+            new OptimizeCSSAssetsPlugin(),
+            new TerserPlugin()
+        ]
+    }
+
+    return config
+}
+
+const isDev = process.env.NODE_ENV === 'development'
+console.log('IS DEV:', isDev)
+
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
@@ -11,7 +34,7 @@ module.exports = {
         analytics: './analytics.js'
     },
     output: {
-        filename: '[name].[contenthash].bundle.js',
+        filename: !isDev ? '[name].[contenthash].js' : '[name].[hash].js',
         path: path.resolve(__dirname, 'dist')
     },
     resolve: {
@@ -21,17 +44,17 @@ module.exports = {
             '@models': path.resolve(__dirname, 'src/modals'),
         }
     },
-    optimization: {
-        splitChunks: {
-            chunks: 'all'
-        }
-    },
+    optimization: optimization(),
     devServer: {
-        port: 4200
+        port: 4200,
+        hot: isDev
     },
     plugins: [
         new HTMLwebpackPlugin({
-            template: './index.html'
+            template: './index.html',
+            minify: {
+                collapseWhitespace: !isDev
+            }
         }),
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin([
@@ -41,7 +64,7 @@ module.exports = {
             }
         ]),
         new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].bundle.css',
+            filename: '[name].[contenthash].css',
         })
     ],
     module: {
@@ -49,7 +72,13 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            hmr: isDev,
+                            reloadAll: true
+                        }
+                    },
                     'css-loader'
                 ]
             },
