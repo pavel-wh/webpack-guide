@@ -6,12 +6,13 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 console.log('IS DEV:', isDev)
 
-const filename = extra => isProd ? `[name].[contenthash].${ extra }` : `[name].${ extra }`
+const filename = extra => isProd ? `[name].[hash].${ extra }` : `[name].${ extra }`
 const optimization = () => {
     const config = {
         splitChunks: {
@@ -73,6 +74,35 @@ const jsLoaders = () => {
     return loaders
 }
 
+const plugins = () => {
+    const base = [
+        new HTMLwebpackPlugin({
+            template: './index.html',
+            minify: {
+                collapseWhitespace: isProd
+            },
+            cache: isProd
+        }),
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, 'src/assets/images/favicon.ico'),
+                to: path.resolve(__dirname, 'dist'),
+            }
+        ]),
+        new MiniCssExtractPlugin({
+            filename: filename('css'),
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+    ]
+
+    // if (isProd) {
+    //     base.push(new BundleAnalyzerPlugin())
+    // }
+
+    return base
+}
+
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
@@ -100,26 +130,7 @@ module.exports = {
         hot: isDev,
     },
     devtool: isDev ? 'source-map' : '',
-    plugins: [
-        new HTMLwebpackPlugin({
-            template: './index.html',
-            minify: {
-                collapseWhitespace: isProd
-            },
-            cache: isProd
-        }),
-        new CleanWebpackPlugin(),
-        new CopyWebpackPlugin([
-            {
-                from: path.resolve(__dirname, 'src/assets/images/favicon.ico'),
-                to: path.resolve(__dirname, 'dist'),
-            }
-        ]),
-        new MiniCssExtractPlugin({
-            filename: filename('css'),
-        }),
-        new webpack.HotModuleReplacementPlugin(),
-    ],
+    plugins: plugins(),
     module: {
         rules: [
             {

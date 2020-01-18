@@ -20,6 +20,6 @@ console.log(pageBox.innerText = post.toString())
 
 console.log('Post to Stirng: ', post.toString(), json, xml, csv)
 
-import ('lodash').then(_ => {
+import ('lodash/random').then(_ => {
     console.log('Lodash', _.random(0, 42, true))
 })
