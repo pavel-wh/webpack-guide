@@ -119,7 +119,7 @@ module.exports = {
         extensions: ['.js', '.json', '.png', '.css'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
-            '@models': path.resolve(__dirname, 'src/modals'),
+            '@models': path.resolve(__dirname, 'src/models'),
         }
     },
     optimization: optimization(),
