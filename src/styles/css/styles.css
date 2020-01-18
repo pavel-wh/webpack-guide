@@ -1,9 +1,10 @@
 @import "~normalize.css";
 @import "./fonts.css";
 
-body, html {
+body {
     font-family: 'Roboto', serif;
     background-color: aliceblue;
+    padding: 20px;
 }
 
 .container {

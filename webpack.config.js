@@ -7,10 +7,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
-console.log('IS DEV:', isDev)
 
 const filename = extra => isProd ? `[name].[hash].${ extra }` : `[name].${ extra }`
 const optimization = () => {
@@ -94,11 +94,12 @@ const plugins = () => {
             filename: filename('css'),
         }),
         new webpack.HotModuleReplacementPlugin(),
+        new VueLoaderPlugin(),
     ]
 
-    // if (isProd) {
-    //     base.push(new BundleAnalyzerPlugin())
-    // }
+    if (isProd) {
+        base.push(new BundleAnalyzerPlugin())
+    }
 
     return base
 }
@@ -190,6 +191,10 @@ module.exports = {
                     options: babelOptions('@babel/preset-react')
                 }
             },
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            }
         ]
     }
 }

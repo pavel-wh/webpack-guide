@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 import '@/styles/css/styles.css'
 import '@/styles/sass/main.sass'
 import '@/styles/less/main.less'
@@ -5,6 +7,7 @@ import '@/styles/less/main.less'
 import Post from '@models/Post' 
 
 import './index.jsx'
+import VueComponent from './index.vue'
 import './babel'
 
 import json from '@/assets/data/example.json'
@@ -20,6 +23,14 @@ console.log(pageBox.innerText = post.toString())
 
 console.log('Post to Stirng: ', post.toString(), json, xml, csv)
 
-import ('lodash/random').then(_ => {
+import ('lodash').then(_ => {
     console.log('Lodash', _.random(0, 42, true))
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+    const el = pageBox.parentElement.appendChild(document.createElement('vue-app'))
+    new Vue({
+        el,
+        render: h => h(VueComponent)
+    })
 })
