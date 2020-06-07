@@ -1,7 +1,3 @@
-# Webpack guide
+# Webpack Guide
 
-## Start
-
-`npm i`
-
-`npm run dev`
+Example for webpack config
